@@ -58,11 +58,11 @@ abstract class DBPoolFactory<C> {
 abstract class DBExecutor<C> {
   ///
   factory DBExecutor(DBPoolFactory<C> poolFactory,
-          {int limit: 1,
+          {int concurrency: 1,
           int retry: 0,
           DBIsolation isolation: DBIsolation.serializable,
           List<TransientClassifier> transientClassifiers}) =>
-      new _DBExecutor(poolFactory, limit, retry, isolation,
+      new _DBExecutor(poolFactory, concurrency, retry, isolation,
           new UnmodifiableListView(transientClassifiers ?? []));
 
   /// Schedules a task.
@@ -86,9 +86,9 @@ class _DBExecutor<C> implements DBExecutor<C> {
   DBPool<C> _pool;
   bool _isClosing = false;
 
-  _DBExecutor(this._poolFactory, int limit, this._retry, this._isolation,
+  _DBExecutor(this._poolFactory, int concurrency, this._retry, this._isolation,
       this._transientClassifiers) {
-    _executor.limit = limit;
+    _executor.concurrency = concurrency;
   }
 
   @override
@@ -163,7 +163,7 @@ class _DBExecutor<C> implements DBExecutor<C> {
     if (_isClosing) throw new Exception('DB does not accept new tasks.');
     if (_pool == null) {
       _pool = await _poolFactory.create(
-          isolation: _isolation, limit: _executor.limit);
+          isolation: _isolation, limit: _executor.concurrency);
     }
     return _pool;
   }

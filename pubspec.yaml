@@ -2,7 +2,7 @@ name: db_executor
 description: >
   A database query executor that controls the parallelism (number of concurrently
   running queries) and handles the proper acquire and release of the connections.
-version: 0.0.1
+version: 0.1.0
 author: Istvan Soos <istvan.soos@agilord.com>
 
 homepage: https://github.com/agilord/db_executor
@@ -11,8 +11,8 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 
 dependencies:
-  async: '>=1.11.0 <2.0.0'
-  executor: '>=0.0.1 <0.2.0'
+  async: '>=2.0.0 <3.0.0'
+  executor: '>=1.0.0 <1.1.0'
 
 dev_dependencies:
-  postgresql: any
+  postgresql: '>=0.3.0 <0.4.0'
